@@ -70,3 +70,5 @@ df10 %>% sheet_write("1Nss0y2xUcMBt5cfWR2xXJX34d2Jb2KeaSQzAaabPVkQ", sheet = "de
 df11 <- read.socrata("https://data.cdc.gov/resource/ks3g-spdg.json") %>% filter(state == "Maryland")
 
 df11 %>% sheet_write("1Nss0y2xUcMBt5cfWR2xXJX34d2Jb2KeaSQzAaabPVkQ", sheet = "CDC_deats")
+
+write_csv(df, "example.csv")
