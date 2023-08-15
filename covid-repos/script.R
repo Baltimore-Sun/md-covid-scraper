@@ -3,11 +3,19 @@ library(googlesheets4)
 library(RSocrata)
 library(gargle)
 
+options(gargle_oauth_cache = ".secrets")
 
-gs4_deauth()
+gargle::gargle_oauth_cache()
 
-ss <- "1Nss0y2xUcMBt5cfWR2xXJX34d2Jb2KeaSQzAaabPVkQ"
-dat <- read_sheet(ss)
+gs4_auth()
+
+options(
+  gargle_oauth_cache = "7a6077d23f6776ccc63f8f70bc12b214_anniejjennemann@gmail.com",
+  gargle_oauth_email = "anniejjennemann@gmail.com"
+)
+
+gs4_find(n_max = 5)
+
 df <- read.socrata("https://opendata.maryland.gov/resource/mgd3-qk8t.json")
 
 df %>% sheet_write("1Nss0y2xUcMBt5cfWR2xXJX34d2Jb2KeaSQzAaabPVkQ", sheet = "df")
