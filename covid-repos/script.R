@@ -2,10 +2,11 @@ library(tidyverse)
 library(googlesheets4)
 library(RSocrata)
 library(gargle)
+library(googledrive)
 
-gs4_deauth()
+drive_auth(cache = ".secrets", email = "anniejjennemann@gmail.com")
 
-gs4_auth(cache = ".secrets", email = "anniejjennemann@gmail.com")
+gs4_auth(token = drive_token())
 
 df <- read.socrata("https://opendata.maryland.gov/resource/mgd3-qk8t.json")
 
