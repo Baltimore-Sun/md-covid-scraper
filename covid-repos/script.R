@@ -4,13 +4,10 @@ library(RSocrata)
 library(gargle)
 
 
-list.files("d67d4efb39eee449dc62932502fd8a0f_anniejjennemann@gmail.com")
+gs4_deauth()
 
-gs4_auth(
-  cache = ".secrets",
-  email = "anniejjennemann@gmail.com"
-)
-
+ss <- "1Nss0y2xUcMBt5cfWR2xXJX34d2Jb2KeaSQzAaabPVkQ"
+dat <- read_sheet(ss)
 df <- read.socrata("https://opendata.maryland.gov/resource/mgd3-qk8t.json")
 
 df %>% sheet_write("1Nss0y2xUcMBt5cfWR2xXJX34d2Jb2KeaSQzAaabPVkQ", sheet = "df")
