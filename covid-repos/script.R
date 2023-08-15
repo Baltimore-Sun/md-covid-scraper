@@ -4,9 +4,7 @@ library(RSocrata)
 library(gargle)
 library(googledrive)
 
-drive_auth(cache = ".secrets", email = "anniejjennemann@gmail.com")
-
-gs4_auth(token = drive_token())
+gs4_auth(email = "anniejjennemann@gmail.com")
 
 df <- read.socrata("https://opendata.maryland.gov/resource/mgd3-qk8t.json")
 
