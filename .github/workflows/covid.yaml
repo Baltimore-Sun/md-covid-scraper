@@ -28,6 +28,7 @@ jobs:
             any::googlesheets4
             any::RSocrata
             any::gargle
+            any::googledrive
 
       - name: Execute Script
         run: |
