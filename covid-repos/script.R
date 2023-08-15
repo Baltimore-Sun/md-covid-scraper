@@ -3,9 +3,8 @@ library(googlesheets4)
 library(RSocrata)
 library(gargle)
 
-options(gargle_oauth_cache = ".secrets")
 
-list.files(".secrets/")
+list.files("d67d4efb39eee449dc62932502fd8a0f_anniejjennemann@gmail.com")
 
 gs4_auth(
   cache = ".secrets",
