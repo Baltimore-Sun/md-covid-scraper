@@ -5,7 +5,7 @@ library(gargle)
 
 gs4_deauth()
 
-gs4_auth(cache = "${{ secrets.SECRET}}", email = TRUE, use_oob = TRUE)
+gs4_auth(cache = ".secrets", email = "anniejjennemann@gmail.com")
 
 df <- read.socrata("https://opendata.maryland.gov/resource/mgd3-qk8t.json")
 
