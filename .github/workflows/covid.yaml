@@ -27,6 +27,7 @@ jobs:
             any::tidyverse
             any::googlesheets4
             any::RSocrata
+            any::gargle
 
       - name: Execute Script
         run: |
