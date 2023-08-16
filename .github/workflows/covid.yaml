@@ -41,12 +41,23 @@ jobs:
           git add .
           git commit -m "Results from R script" || echo "No changes to commit"
           git push origin || echo "No changes to commit"-
-
-      - name: Google Spreadsheet - CSV importer
-        uses: canonical-web-and-design/csv-to-google-spreadsheet@1.0.0
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - id: 'update_worksheet'
+        uses: jroehl/gsheet.action@v2.0.0 # you can specify '@release' to always have the latest changes
         with:
-            csv_path: example.csv
-            spreadsheet_id: ${{ secrets.google_spreadsheet_id }}
-            worksheet: 0
-            google_service_account_email: ${{ secrets.google_service_account_email }}
-            google_service_account_private_key: ${{ secrets.google_service_account_private_key }}
+          spreadsheetId: <spreadsheetId>
+          commands: | # list of commands, specified as a valid JSON string
+            [
+              { "command": "addWorksheet", "args": { "worksheetTitle": "<worksheetTitle>" }},
+              { "command": "updateData", "args": { "data": [["A1", "A2", "A3"]] }},
+              { "command": "getData", "args": { "range": "'<worksheetTitle>'!A2:B3" } }
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
+      - name: dump results
+        env:
+          RESULTS: ${{ steps.update_worksheet.outputs.results }}
+        run: echo "$RESULTS" | jq
