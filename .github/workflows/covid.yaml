@@ -44,7 +44,7 @@ jobs:
       - name: Google Spreadsheet - CSV importer
         uses: canonical-web-and-design/csv-to-google-spreadsheet@1.0.0
         with:
-            csv_path: path/file.csv
+            csv_path: path/example.csv
             spreadsheet_id: ${{ secrets.google_spreadsheet_id }}
             worksheet: 0
             google_service_account_email: ${{ secrets.google_service_account_email }}
