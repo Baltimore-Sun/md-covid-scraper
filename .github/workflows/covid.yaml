@@ -33,3 +33,19 @@ jobs:
       - name: Execute Script
         run: |
           Rscript "covid-repos/script.R"
+
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Results from R script" || echo "No changes to commit"
+          git push origin || echo "No changes to commit"-
+      - name: Google Spreadsheet - CSV importer
+        uses: canonical-web-and-design/csv-to-google-spreadsheet@1.0.0
+        with:
+            csv_path: path/file.csv
+            spreadsheet_id: ${{ secrets.google_spreadsheet_id }}
+            worksheet: 0
+            google_service_account_email: ${{ secrets.google_service_account_email }}
+            google_service_account_private_key: ${{ secrets.google_service_account_private_key }}
