@@ -29,6 +29,7 @@ jobs:
             any::RSocrata
             any::gargle
             any::googledrive
+            any::zoo
 
       - name: Execute Script
         run: |
