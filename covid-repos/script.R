@@ -6,7 +6,7 @@ df2 <- read.socrata("https://opendata.maryland.gov/resource/t7ek-pn7n.json")
 
 df2 <- df2 %>% select(date, count) %>% mutate(date = as.Date(date))
 
-df2 <- df2 %>% tail(n = 20) %>% mutate(count = as.numeric(count))
+df2 <- df2 %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 
 md_cases <- df2 %>% mutate(Diff = count - lag(count))
 
