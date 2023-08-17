@@ -37,8 +37,6 @@ df6_sum <- df6 %>% mutate(count = acute+icu)
 df6_sum <- transform(df6_sum, avg7 = rollmeanr(count, 7, fill = NA)) %>% select(reportdate, avg7)
 
 
-
-
 df7 <- read.socrata("https://opendata.maryland.gov/resource/65qq-j35q.json")
 
 df7 <- df7 %>% select(date, count) %>% mutate(date = as.Date(date))
@@ -48,7 +46,6 @@ df7 <- df7 %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 md_deaths <- transform(df7, avg7 = rollmeanr(count, 7, fill = NA)) %>% select(date, avg7)
 
 write_csv(md_deaths, "md_deaths.csv")
-
 
 
 md_hosp2 <- df6_sum %>% tail(n = 1)
@@ -78,6 +75,7 @@ topper <- md_deaths2 %>% full_join(md_hosp2, by=c("extra", "MY", "avg7"))
 
 
 
+
 ## hosp are more work bc it breaks it down by icu and acute and here we want the sum
 
 md_hosp3 <- md_hosp %>% tail(n=1) 
@@ -92,7 +90,7 @@ md_hosp4 <- md_hosp4 %>% pivot_longer(!reportdate, names_to = "type", values_to 
 
 md_hosp5 <- md_hosp3 %>% full_join(md_hosp4, by = "extra")
 
-md_hosp5 <- md_hosp5 %>% summarise(two_week_chg = (count1-count14)/count14) %>% mutate(extra = "hosp")
+md_hosp5 <- md_hosp5 %>% summarise(two_week_chg = ((count1-count14)/count14)*100) %>% mutate(extra = "hosp")
 
 
 
@@ -110,7 +108,7 @@ md_deaths4 <- md_deaths4 %>% mutate(extra = "extra") %>% select(avg7, extra)
 
 md_deaths5 <- md_deaths3 %>% full_join(md_deaths4, by = "extra")
 
-md_deaths5 <- md_deaths5 %>% summarise(two_week_chg = (avg7.x-avg7.y)/avg7.y) %>% mutate(extra = "deaths")
+md_deaths5 <- md_deaths5 %>% summarise(two_week_chg = ((avg7.x-avg7.y)/avg7.y)*100) %>% mutate(extra = "deaths")
 
 
 
@@ -142,6 +140,7 @@ topper <- topper %>% full_join(mini, by="extra")
 
 topper <- topper %>% select(MY, avg7, two_week_chg, a, b, c, d, e, f, g, h, i, j, k, l, m, n)
 
+topper <- topper %>% rename(" "="MY") %>% rename("7-day average"="avg7") %>% rename("Two-week change"="two_week_chg")
 
 write_csv(topper, "graphic-top.csv")
 
