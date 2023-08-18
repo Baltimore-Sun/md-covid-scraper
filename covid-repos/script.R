@@ -236,6 +236,91 @@ map_deaths <- map_deaths %>% rename("Date"="date") %>% rename("County"="county")
 write_csv(map_deaths, "map_deaths.csv")
 
 
+df3 <- read.socrata("https://opendata.maryland.gov/resource/tm86-dujs.json")
+
+df3 <- df3 %>% select(date:worcester) %>% mutate(date = as.Date(date))
+
+df3 <- df3 %>% tail(n = 21) %>% mutate_if(is.character, as.numeric)
+
+df3 <- df3 %>% fill(allegany:worcester, .direction = "down")
+
+df3 <- df3 %>% mutate(allegany = allegany - lag(allegany)) %>%
+  mutate(anne_arundel = anne_arundel - lag(anne_arundel))  %>%
+  mutate(baltimore = baltimore - lag(baltimore))  %>%
+  mutate(baltimore_city = baltimore_city - lag(baltimore_city))  %>%
+  mutate(calvert = calvert - lag(calvert))  %>%
+  mutate(caroline = caroline - lag(caroline))  %>%
+  mutate(carroll = carroll - lag(carroll))  %>%
+  mutate(cecil = cecil - lag(cecil))  %>%
+  mutate(charles = charles - lag(charles))  %>%
+  mutate(dorchester = dorchester - lag(dorchester))  %>%
+  mutate(frederick = frederick- lag(frederick))  %>%
+  mutate(garrett = garrett - lag(garrett))  %>%
+  mutate(harford = harford - lag(harford))  %>%
+  mutate(howard = howard - lag(howard))  %>%
+  mutate(kent = kent- lag(kent))  %>%
+  mutate(montgomery = montgomery - lag(montgomery))  %>%
+  mutate(prince_georges = prince_georges - lag(prince_georges)) %>%
+  mutate(queen_annes = queen_annes - lag(queen_annes))  %>%
+  mutate(somerset= somerset - lag(somerset))  %>%
+  mutate(st_marys = st_marys - lag(st_marys))  %>%
+  mutate(talbot = talbot - lag(talbot))  %>%
+  mutate(washington = washington- lag(washington))  %>%
+  mutate(wicomico = wicomico - lag(wicomico))  %>%
+  mutate(worcester = worcester - lag(worcester))
+
+county_cases <- df3 %>% select(allegany:worcester)
+
+county_cases <- transform(county_cases, avg7 = rollmeanr(county_cases, k = 7, fill = NA))
+
+map_cases <- county_cases %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(blank = "blank")
+
+map_cases <- map_cases %>% rename("Allegany"="avg7.allegany") %>% 
+  rename("Anne Arundel"="avg7.anne_arundel") %>% 
+  rename("Baltimore"="avg7.baltimore") %>% 
+  rename("Baltimore City"="avg7.baltimore_city") %>% 
+  rename("Calvert"="avg7.calvert") %>% 
+  rename("Caroline"="avg7.caroline") %>% 
+  rename("Carroll"="avg7.carroll") %>% 
+  rename("Cecil"="avg7.cecil") %>% 
+  rename("Charles"="avg7.charles") %>% 
+  rename("Dorchester"="avg7.dorchester") %>% 
+  rename("Frederick"="avg7.frederick") %>% 
+  rename("Garrett"="avg7.garrett") %>% 
+  rename("Harford"="avg7.harford") %>% 
+  rename("Howard"="avg7.howard") %>% 
+  rename("Kent"="avg7.kent") %>% 
+  rename("Montgomery"="avg7.montgomery") %>% 
+  rename("Prince George's"="avg7.prince_georges") %>% 
+  rename("Queen Anne's"="avg7.queen_annes") %>% 
+  rename("Somerset"="avg7.somerset") %>% 
+  rename("St. Mary's"="avg7.st_marys") %>% 
+  rename("Talbot"="avg7.talbot") %>% 
+  rename("Washington"="avg7.washington") %>% 
+  rename("Wicomico"="avg7.wicomico") %>% 
+  rename("Worcester"="avg7.worcester")
+
+county_table2 <- df3 %>% select(date) %>% tail(n=1) %>% mutate(blank = "blank")
+
+map_cases <- map_cases %>% full_join(county_table2, by="blank")
+
+map_cases <- map_cases %>% select(-c(blank))
+
+map_cases <- map_cases %>% pivot_longer(!date, names_to = "county", values_to = "seven_day_average")
+
+
+
+map_cases <- map_cases %>% full_join(pop, by="county")
+
+map_cases <- map_cases %>% mutate(population = as.numeric(population))
+
+map_cases <- map_cases %>% mutate(avg7_per10k = seven_day_average/population*10000)
+
+map_cases <- map_cases %>% select(date, county, avg7_per10k)
+
+map_cases <- map_cases %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day average per 10,000"="avg7_per10k")
+
+write_csv(map_cases, "map_cases.csv")
 
 
 
