@@ -364,6 +364,39 @@ age_graphic <- df9 %>% left_join(age_pop, by="age") %>% select(age, pct_age_case
 write_csv(age_graphic, "age_graphic.csv")
 
 
+df10 <- read.socrata("https://opendata.maryland.gov/resource/qwhp-7983.json")
+df10 <- df10 %>% tail(n = 1) %>% select(date:not_available)
+df10 <- df10 %>% pivot_longer(!date, names_to = "race", values_to = "count") %>% mutate(count = as.numeric(count))
+
+
+df10 <- df10 %>% mutate(total_deaths = sum(count))
+
+
+df10  <- df10 %>% mutate(pct_race_cases = count/total_deaths*100)
+
+race <- c("african_american",
+               "white",
+               "hispanic",
+               "asian",
+               "other"
+)
+
+
+race_ethn_population <- c("1951658",
+                          "3530719",
+                          "706816",
+                          "435183",
+                          "247100"
+                          )
+
+
+race_ethn_pop <- data.frame(race, race_ethn_population) %>% mutate(race_ethn_population = as.numeric(race_ethn_population))
+
+race_ethn_pop <- race_ethn_pop %>% mutate(pct_pop = (race_ethn_population/6164660)*100)
+
+race_ethn_graphic <- df10 %>% left_join(race_ethn_pop, by="race") %>% select(race, pct_race_cases, pct_pop)
+
+write_csv(race_ethn_graphic, "race_ethn_graphic.csv")
 
 
 
