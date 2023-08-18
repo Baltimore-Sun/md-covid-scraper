@@ -187,7 +187,7 @@ map_deaths <- county_deaths %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worce
 
 map_deaths <- map_deaths %>% rename("Allegany"="avg7.allegany") %>% 
   rename("Anne Arundel"="avg7.anne_arundel") %>% 
-  rename("Baltimore"="avg7.baltimore") %>% 
+  rename("Baltimore County"="avg7.baltimore") %>% 
   rename("Baltimore City"="avg7.baltimore_city") %>% 
   rename("Calvert"="avg7.calvert") %>% 
   rename("Caroline"="avg7.caroline") %>% 
@@ -277,7 +277,7 @@ map_cases <- county_cases %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcest
 
 map_cases <- map_cases %>% rename("Allegany"="avg7.allegany") %>% 
   rename("Anne Arundel"="avg7.anne_arundel") %>% 
-  rename("Baltimore"="avg7.baltimore") %>% 
+  rename("Baltimore County"="avg7.baltimore") %>% 
   rename("Baltimore City"="avg7.baltimore_city") %>% 
   rename("Calvert"="avg7.calvert") %>% 
   rename("Caroline"="avg7.caroline") %>% 
