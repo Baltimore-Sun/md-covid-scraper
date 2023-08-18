@@ -52,7 +52,6 @@ write_csv(md_deaths, "md_deaths.csv")
 
 
 
-## first part is creating the text in the first cell with the latest date and the most recent data for the second column
 
 md_hosp2 <- df6_sum %>% tail(n = 1)
 
