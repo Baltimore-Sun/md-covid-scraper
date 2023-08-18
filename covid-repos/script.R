@@ -389,6 +389,8 @@ big_table <- big_table %>% full_join(map_cases, by="County")
 
 big_table <- big_table %>% select(-c(Date.y)) %>% rename("Date"="Date.x")
 
+write_csv(big_table, "big-table.csv")
+
 
 ### deaths by age
 
