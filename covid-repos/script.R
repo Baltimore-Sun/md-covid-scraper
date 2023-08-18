@@ -18,6 +18,7 @@ md_cases <- transform(md_cases, avg7 = rollmeanr(Diff, 7, fill = NA)) %>% select
 write_csv(md_cases, "md_cases.csv")
 
 
+#### data for case hospitalization line chart
 
 df6 <- read.socrata("https://opendata.maryland.gov/resource/hd2f-3amb.json")
 
@@ -29,14 +30,14 @@ md_hosp <- transform(df6, avg7_acute = rollmeanr(acute, 7, fill = NA)) %>% trans
 
 write_csv(md_hosp, "md_hosp.csv")
 
-
+### also make table with sum of both types
 
 df6_sum <- df6 %>% mutate(count = acute+icu)
 
 df6_sum <- transform(df6_sum, avg7 = rollmeanr(count, 7, fill = NA)) %>% select(reportdate, avg7)
 
 
-
+#### data for case deaths line chart
 
 df7 <- read.socrata("https://opendata.maryland.gov/resource/65qq-j35q.json")
 
@@ -49,8 +50,9 @@ md_deaths <- transform(df7, avg7 = rollmeanr(count, 7, fill = NA)) %>% select(da
 write_csv(md_deaths, "md_deaths.csv")
 
 
+#### data for case graphic topper w deaths and hosp data and two mini lines!
 
-
+## first part is creating the text in the first cell with the latest date and the most recent data for the second column
 
 md_hosp2 <- df6_sum %>% tail(n = 1)
 
@@ -78,6 +80,9 @@ md_hosp2 <- md_hosp2 %>% mutate(extra = "hosp")
 topper <- md_deaths2 %>% full_join(md_hosp2, by=c("extra", "MY", "avg7"))
 
 
+#### second part is calculating the two week change column
+
+## hosp are more work bc it breaks it down by icu and acute and here we want the sum
 
 md_hosp3 <- md_hosp %>% tail(n=1)
 
@@ -93,6 +98,8 @@ md_hosp5 <- md_hosp3 %>% full_join(md_hosp4, by = "extra")
 
 md_hosp5 <- md_hosp5 %>% summarise(two_week_chg = ((count1-count14)/count14)*100) %>% mutate(extra = "hosp")
 
+
+### 2 week chg for deaths
 
 md_deaths3 <- md_deaths %>% tail(n=1)
 
@@ -111,6 +118,8 @@ md_deaths5 <- md_deaths5 %>% summarise(two_week_chg = ((avg7.x-avg7.y)/avg7.y)*1
 
 
 
+### appending to table!
+
 
 topper2 <- md_hosp5 %>% full_join(md_deaths5, by=c("extra", "two_week_chg"))
 
@@ -118,6 +127,7 @@ topper <- topper %>% inner_join(topper2, by="extra")
 
 
 
+### finally, adding in extra 14 columns for line chart
 
 hosp_mini <- df6_sum %>% tail(n=14) %>% mutate(order= c("a","b","c","d","e","f","g","h","i","j","k","l","m","n"))
 
@@ -133,7 +143,7 @@ dea_mini <- dea_mini  %>% select(order, avg7) %>% pivot_wider(names_from = order
 
 mini <- hosp_mini %>% full_join(dea_mini, by=c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","extra"))
 
-
+### append to topper
 
 topper <- topper %>% full_join(mini, by="extra")
 
@@ -144,6 +154,7 @@ topper <- topper %>% rename(" "="MY") %>% rename("7-day average"="avg7") %>% ren
 write_csv(topper, "graphic-top.csv")
 
 
+### county table
 
 df8 <- read.socrata("https://opendata.maryland.gov/resource/x28q-kc4a.json")
 
@@ -183,6 +194,11 @@ county_deaths <- df8 %>% select(allegany:worcester)
 county_deaths <- transform(county_deaths, avg7 = rollmeanr(county_deaths, k = 7, fill = NA))
 
 
+
+
+### county death map 7 day per 10,000
+
+
 map_deaths <- county_deaths %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(blank = "blank")
 
 map_deaths <- map_deaths %>% rename("Allegany"="avg7.allegany") %>% 
@@ -211,7 +227,6 @@ map_deaths <- map_deaths %>% rename("Allegany"="avg7.allegany") %>%
   rename("Worcester"="avg7.worcester")
 
 county_table <- df8 %>% select(date) %>% tail(n=1) %>% mutate(blank = "blank")
-
 map_deaths <- map_deaths %>% full_join(county_table, by="blank")
 
 map_deaths <- map_deaths %>% select(-c(blank))
@@ -231,9 +246,12 @@ map_deaths <- map_deaths %>% mutate(avg7_per10k = seven_day_average/population*1
 
 map_deaths <- map_deaths %>% select(date, county, avg7_per10k)
 
-map_deaths <- map_deaths %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day average per 10,000"="avg7_per10k")
+map_deaths <- map_deaths %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. deaths per 10,000"="avg7_per10k")
 
 write_csv(map_deaths, "map_deaths.csv")
+
+
+### county case map 7 day per 10,000
 
 
 df3 <- read.socrata("https://opendata.maryland.gov/resource/tm86-dujs.json")
@@ -300,6 +318,7 @@ map_cases <- map_cases %>% rename("Allegany"="avg7.allegany") %>%
   rename("Wicomico"="avg7.wicomico") %>% 
   rename("Worcester"="avg7.worcester")
 
+
 county_table2 <- df3 %>% select(date) %>% tail(n=1) %>% mutate(blank = "blank")
 
 map_cases <- map_cases %>% full_join(county_table2, by="blank")
@@ -318,10 +337,60 @@ map_cases <- map_cases %>% mutate(avg7_per10k = seven_day_average/population*100
 
 map_cases <- map_cases %>% select(date, county, avg7_per10k)
 
-map_cases <- map_cases %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day average per 10,000"="avg7_per10k")
+map_cases <- map_cases %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. cases per 10,000"="avg7_per10k")
 
 write_csv(map_cases, "map_cases.csv")
 
+
+
+### rest of county table
+
+### get last two weeks of 7 day average of deaths
+
+county_death_chg <- county_deaths %>% tail(n=14) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(order= c("a","b","c","d","e","f","g","h","i","j","k","l","m","n"))
+
+county_death_chg <- county_death_chg %>% rename("Allegany"="avg7.allegany") %>% 
+  rename("Anne Arundel"="avg7.anne_arundel") %>% 
+  rename("Baltimore"="avg7.baltimore") %>% 
+  rename("Baltimore City"="avg7.baltimore_city") %>% 
+  rename("Calvert"="avg7.calvert") %>% 
+  rename("Caroline"="avg7.caroline") %>% 
+  rename("Carroll"="avg7.carroll") %>% 
+  rename("Cecil"="avg7.cecil") %>% 
+  rename("Charles"="avg7.charles") %>% 
+  rename("Dorchester"="avg7.dorchester") %>% 
+  rename("Frederick"="avg7.frederick") %>% 
+  rename("Garrett"="avg7.garrett") %>% 
+  rename("Harford"="avg7.harford") %>% 
+  rename("Howard"="avg7.howard") %>% 
+  rename("Kent"="avg7.kent") %>% 
+  rename("Montgomery"="avg7.montgomery") %>% 
+  rename("Prince George's"="avg7.prince_georges") %>% 
+  rename("Queen Anne's"="avg7.queen_annes") %>% 
+  rename("Somerset"="avg7.somerset") %>% 
+  rename("St. Mary's"="avg7.st_marys") %>% 
+  rename("Talbot"="avg7.talbot") %>% 
+  rename("Washington"="avg7.washington") %>% 
+  rename("Wicomico"="avg7.wicomico") %>% 
+  rename("Worcester"="avg7.worcester")
+
+
+
+
+county_death_chg2 <- county_death_chg %>% pivot_longer(!order, names_to = "County", values_to = "Value")
+county_death_chg2 <- county_death_chg2 %>% pivot_wider(names_from = order, values_from =  Value)
+
+
+big_table <- map_deaths %>% full_join(county_death_chg2, by="County")
+
+
+big_table <- big_table %>% full_join(map_cases, by="County")
+
+
+big_table <- big_table %>% select(-c(Date.y)) %>% rename("Date"="Date.x")
+
+
+### deaths by age
 
 df9 <- read.socrata("https://opendata.maryland.gov/resource/ix2d-fenx.json") %>% mutate(date = as.Date(date))
 df9 <- df9 %>% tail(n = 1) %>% select(date:age_unknown)
@@ -363,6 +432,8 @@ age_graphic <- df9 %>% left_join(age_pop, by="age") %>% select(age, pct_age_case
 
 write_csv(age_graphic, "age_graphic.csv")
 
+### deaths by race
+
 
 df10 <- read.socrata("https://opendata.maryland.gov/resource/qwhp-7983.json")
 df10 <- df10 %>% tail(n = 1) %>% select(date:not_available)
@@ -397,6 +468,8 @@ race_ethn_pop <- race_ethn_pop %>% mutate(pct_pop = (race_ethn_population/616466
 race_ethn_graphic <- df10 %>% left_join(race_ethn_pop, by="race") %>% select(race, pct_race_cases, pct_pop)
 
 write_csv(race_ethn_graphic, "race_ethn_graphic.csv")
+
+
 
 
 
