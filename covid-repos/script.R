@@ -8,7 +8,7 @@ df2 <- read.socrata("https://opendata.maryland.gov/resource/t7ek-pn7n.json")
 
 df2 <- df2 %>% select(date, count) %>% mutate(date = as.Date(date))
 
-df2 <- df2 %>% mutate(date = format(date, "%m/%d/%Y"))
+
 
 df2 <- df2 %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 
@@ -27,7 +27,7 @@ df6 <- read.socrata("https://opendata.maryland.gov/resource/hd2f-3amb.json")
 
 df6 <- df6 %>% select(reportdate, acute, icu) %>% mutate(reportdate = as.Date(reportdate))
 
-df6 <- df6 %>% mutate(reportdate = format(reportdate, "%m/%d/%Y"))
+
 
 df6 <- df6 %>% tail(n = 365) %>% mutate(acute = as.numeric(acute)) %>% mutate(icu = as.numeric(icu))
 
@@ -52,7 +52,7 @@ df7 <- read.socrata("https://opendata.maryland.gov/resource/65qq-j35q.json")
 
 df7 <- df7 %>% select(date, count) %>% mutate(date = as.Date(date))
 
-df7 <- df7 %>% mutate(date = format(date, "%m/%d/%Y"))
+
 
 df7 <- df7 %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 
