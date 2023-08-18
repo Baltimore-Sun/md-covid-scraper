@@ -323,7 +323,45 @@ map_cases <- map_cases %>% rename("Date"="date") %>% rename("County"="county") %
 write_csv(map_cases, "map_cases.csv")
 
 
+df9 <- read.socrata("https://opendata.maryland.gov/resource/ix2d-fenx.json") %>% mutate(date = as.Date(date))
+df9 <- df9 %>% tail(n = 1) %>% select(date:age_unknown)
+df9 <- df9 %>% pivot_longer(!date, names_to = "age", values_to = "count") %>% mutate(count = as.numeric(count))
 
+df9 <- df9 %>% mutate(total_deaths = sum(count))
+
+
+df9  <- df9 %>% mutate(pct_age_cases = count/total_deaths*100)
+
+age <- c("age_0_to_9",
+         "age_10_to_19",
+         "age_20_to_29",
+         "age_30_to_39",
+         "age_40_to_49",
+         "age_50_to_59",
+         "age_60_to_69",
+         "age_70_to_79",
+         "age_80plus"
+)
+
+
+age_population <- c("737067",
+                "772508",
+                "809165",
+                "833654",
+                "738594",
+                "824760",
+                "742474",
+                "466028",
+                "240410")
+
+
+age_pop <- data.frame(age, age_population) %>% mutate(age_population = as.numeric(age_population))
+
+age_pop <- age_pop %>% mutate(pct_pop = (age_population/6164660)*100)
+
+age_graphic <- df9 %>% left_join(age_pop, by="age") %>% select(age, pct_age_cases, pct_pop)
+
+write_csv(age_graphic, "age_graphic.csv")
 
 
 
