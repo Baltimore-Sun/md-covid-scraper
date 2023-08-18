@@ -398,7 +398,7 @@ big_table <- map_deaths %>% full_join(county_death_chg2, by="County")
 big_table <- big_table %>% full_join(map_cases, by="County")
 
 
-big_table <- big_table %>% select(-c(Date.y)) %>% select(-c(Date.x)) %>% rename("Date"="Date.x")
+big_table <- big_table %>% select(-c(Date.y)) %>% select(-c(Date.x))
 
 
 
