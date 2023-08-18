@@ -30,6 +30,7 @@ jobs:
             any::gargle
             any::googledrive
             any::zoo
+            any::lubridate
 
       - name: Execute Script
         run: |
