@@ -249,17 +249,17 @@ population <- c("67267","593286","846161","569931","94573","33433","175305","104
 
 pop <- data.frame(county, population)
 
-map_deaths <- map_deaths %>% full_join(pop, by="county")
+map_deaths2 <- map_deaths %>% full_join(pop, by="county")
 
-map_deaths <- map_deaths %>% mutate(population = as.numeric(population))
+map_deaths2 <- map_deaths2 %>% mutate(population = as.numeric(population))
 
-map_deaths <- map_deaths %>% mutate(avg7_per10k = seven_day_average/population*10000)
+map_deaths2 <- map_deaths2 %>% mutate(avg7_per10k = seven_day_average/population*10000)
 
-map_deaths <- map_deaths %>% select(date, county, avg7_per10k)
+map_deaths2 <- map_deaths2 %>% select(date, county, avg7_per10k)
 
-map_deaths <- map_deaths %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. deaths per 10,000"="avg7_per10k")
+map_deaths2 <- map_deaths2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. deaths per 10,000"="avg7_per10k")
 
-write_csv(map_deaths, "map_deaths.csv")
+write_csv(map_deaths2, "map_deaths.csv")
 
 
 ### county case map 7 day per 10,000
@@ -340,15 +340,15 @@ map_cases <- map_cases %>% pivot_longer(!date, names_to = "county", values_to = 
 
 
 
-map_cases <- map_cases %>% full_join(pop, by="county")
+map_cases2 <- map_cases %>% full_join(pop, by="county")
 
-map_cases <- map_cases %>% mutate(population = as.numeric(population))
+map_cases2 <- map_cases2 %>% mutate(population = as.numeric(population))
 
-map_cases <- map_cases %>% mutate(avg7_per10k = seven_day_average/population*10000)
+map_cases2 <- map_cases2 %>% mutate(avg7_per10k = seven_day_average/population*10000)
 
-map_cases <- map_cases %>% select(date, county, avg7_per10k)
+map_cases2 <- map_cases2 %>% select(date, county, avg7_per10k)
 
-map_cases <- map_cases %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. cases per 10,000"="avg7_per10k")
+map_cases2 <- map_cases2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. cases per 10,000"="avg7_per10k")
 
 write_csv(map_cases, "map_cases.csv")
 
@@ -392,13 +392,15 @@ county_death_chg2 <- county_death_chg %>% pivot_longer(!order, names_to = "Count
 county_death_chg2 <- county_death_chg2 %>% pivot_wider(names_from = order, values_from =  Value)
 
 
-big_table <- map_deaths %>% full_join(county_death_chg2, by="County")
+big_table <- map_deaths %>% full_join(county_death_chg2, by=c("county"="County"))
 
 
-big_table <- big_table %>% full_join(map_cases, by="County")
+big_table <- big_table %>% full_join(map_cases, by="county")
 
 
-big_table <- big_table %>% select(-c(Date.y)) %>% select(-c(Date.x))
+big_table <- big_table %>% select(-c(date.y)) %>% select(-c(date.x))
+
+big_table <- big_table %>% rename("County"="county") %>% rename("7-day average deaths"="seven_day_average.x") %>% rename("7-day average cases"="seven_day_average.y")
 
 
 
@@ -457,7 +459,7 @@ age_pop <- age_pop %>% mutate(pct_pop = (age_population/6164660)*100)
 age_graphic <- df9 %>% left_join(age_pop, by="age") %>% select(age, pct_age_deaths, pct_pop)
 
 age_graphic  <- age_graphic %>% rename("Percentage of deaths"="pct_age_deaths") %>% rename("Percentage of population"="pct_pop")
-  
+
 write_csv(age_graphic, "age_graphic.csv")
 
 ### deaths by race
@@ -507,7 +509,6 @@ race_ethn_graphic <- df10 %>% left_join(race_ethn_pop, by="race") %>% select(rac
 race_ethn_graphic <- race_ethn_graphic %>% rename("Percentage of deaths"="pct_race_deaths") %>% rename("Percentage of population"="pct_pop")
 
 write_csv(race_ethn_graphic, "race_ethn_graphic.csv")
-
 
 
 
