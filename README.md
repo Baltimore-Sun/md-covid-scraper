@@ -6,7 +6,7 @@ This repository was created in August 2023 and uses R and Github actions to scra
 
 Packages required: tidyverse, RSocrata and zoo
 
-The file script.R uses RSocrata to scrape data from the Maryland Department of Health's COVID-19 data on the [Open Data Portal](https://opendata.maryland.gov/). It then passes through several functions to clean and prepare for Datawrapper. 
+The file [script.R](https://github.com/Baltimore-Sun/md-covid-scraper/blob/main/covid-repos/script.R) uses RSocrata to scrape data from the Maryland Department of Health's COVID-19 data on the [Open Data Portal](https://opendata.maryland.gov/). It then passes through several functions to clean and prepare for Datawrapper. 
 
 ### Github Actions
 
