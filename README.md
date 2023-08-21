@@ -10,7 +10,7 @@ The file script.R uses RSocrata to scrape data from the Maryland Department of H
 
 ### Github Actions
 
-The covid.yaml file is scheduled to run every Tuesday at 2 p.m. and runs the script.R as well as commits the CSVs created from the R script. The URL's of all raw CSVs in Github are connected to the Datawrapper charts, which update hourly.
+The [covid.yaml](https://github.com/Baltimore-Sun/md-covid-scraper/blob/main/.github/workflows/covid.yaml) file is scheduled to run every Tuesday at 2 p.m. and runs the script.R as well as commits the CSVs created from the R script. The URL's of all raw CSVs in Github are connected to the Datawrapper charts, which update hourly.
 
 ### Reproduction
 
