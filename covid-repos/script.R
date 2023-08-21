@@ -350,7 +350,7 @@ map_cases2 <- map_cases2 %>% select(date, county, avg7_per10k)
 
 map_cases2 <- map_cases2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. cases per 10,000"="avg7_per10k")
 
-write_csv(map_cases, "map_cases.csv")
+write_csv(map_cases2, "map_cases.csv")
 
 
 
