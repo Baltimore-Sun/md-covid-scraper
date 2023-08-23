@@ -25,12 +25,8 @@ jobs:
             any::readr
             any::knitr
             any::tidyverse
-            any::googlesheets4
             any::RSocrata
-            any::gargle
-            any::googledrive
             any::zoo
-            any::lubridate
 
       - name: Execute Script
         run: |
