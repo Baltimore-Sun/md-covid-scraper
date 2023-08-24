@@ -16,8 +16,9 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          cache: true
           packages: |
             any::gh
             any::pkgdown
@@ -26,7 +27,6 @@ jobs:
             any::readr
             any::knitr
             any::tidyverse
-            any::RSocrata
             any::zoo
 
       - name: Execute Script
