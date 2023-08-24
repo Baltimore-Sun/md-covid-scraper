@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron:  "00 10 * * 1-5"
+    - cron:  "00 17 * * 1-5"
   workflow_dispatch:
 
 name: covid-scraper
@@ -20,6 +20,7 @@ jobs:
         with:
           packages: |
             any::gh
+            any::pkgdown
             any::dplyr
             any::tidyr
             any::readr
