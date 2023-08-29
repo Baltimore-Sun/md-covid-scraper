@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron:  "*/30 14-20 * * TUE"
+    - cron:  "*/5 14-20 * * TUE"
   workflow_dispatch:
 
 name: covid-scraper
