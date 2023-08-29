@@ -4,13 +4,7 @@ library(zoo)
 library(lubridate)
 
 
-df2 <- read.socrata("https://opendata.maryland.gov/resource/t7ek-pn7n.json")
-
-df2 <- df2 %>% select(date, count) %>% mutate(date = as.Date(date))
-
-
-
-df2 <- df2 %>% tail(n = 365) %>% mutate(count = as.numeric(count))
+df2 <- read.socrata("https://opendata.maryland.gov/resource/t7ek-pn7n.json") %>% select(date, count) %>% mutate(date = as.Date(date)) %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 
 md_cases <- df2 %>% mutate(Diff = count - lag(count))
 
@@ -22,13 +16,8 @@ write_csv(md_cases, "md_cases.csv")
 
 
 
-df6 <- read.socrata("https://opendata.maryland.gov/resource/hd2f-3amb.json")
+df6 <- read.socrata("https://opendata.maryland.gov/resource/hd2f-3amb.json") %>% select(reportdate, acute, icu) %>% mutate(reportdate = as.Date(reportdate)) %>% tail(n = 365) %>% mutate(acute = as.numeric(acute)) %>% mutate(icu = as.numeric(icu))
 
-df6 <- df6 %>% select(reportdate, acute, icu) %>% mutate(reportdate = as.Date(reportdate))
-
-
-
-df6 <- df6 %>% tail(n = 365) %>% mutate(acute = as.numeric(acute)) %>% mutate(icu = as.numeric(icu))
 
 md_hosp <- transform(df6, avg7_acute = rollmeanr(acute, 7, fill = NA)) %>% transform(df6, avg7_icu = rollmeanr(icu, 7, fill = NA)) %>% select(reportdate, avg7_acute, avg7_icu)
 
@@ -47,13 +36,9 @@ df6_sum <- transform(df6_sum, avg7 = rollmeanr(count, 7, fill = NA)) %>% select(
 
 
 
-df7 <- read.socrata("https://opendata.maryland.gov/resource/65qq-j35q.json")
-
-df7 <- df7 %>% select(date, count) %>% mutate(date = as.Date(date))
+df7 <- read.socrata("https://opendata.maryland.gov/resource/65qq-j35q.json") %>% select(date, count) %>% mutate(date = as.Date(date)) %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 
 
-
-df7 <- df7 %>% tail(n = 365) %>% mutate(count = as.numeric(count))
 
 md_deaths <- transform(df7, avg7 = rollmeanr(count, 7, fill = NA)) %>% select(date, avg7)
 
@@ -158,13 +143,9 @@ write_csv(topper, "graphic-top.csv")
 
 
 
-df8 <- read.socrata("https://opendata.maryland.gov/resource/x28q-kc4a.json")
+df8 <- read.socrata("https://opendata.maryland.gov/resource/x28q-kc4a.json") %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% tail(n = 21) %>% mutate_if(is.character, as.numeric) %>% fill(allegany:worcester, .direction = "down")
 
-df8 <- df8 %>% select(date:worcester) %>% mutate(date = as.Date(date))
 
-df8 <- df8 %>% tail(n = 21) %>% mutate_if(is.character, as.numeric)
-
-df8 <- df8 %>% fill(allegany:worcester, .direction = "down")
 
 df8 <- df8 %>% mutate(allegany = allegany - lag(allegany)) %>%
   mutate(anne_arundel = anne_arundel - lag(anne_arundel))  %>%
@@ -252,13 +233,9 @@ write_csv(map_deaths2, "map_deaths.csv")
 
 
 
-df3 <- read.socrata("https://opendata.maryland.gov/resource/tm86-dujs.json")
+df3 <- read.socrata("https://opendata.maryland.gov/resource/tm86-dujs.json") %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% tail(n = 21) %>% mutate_if(is.character, as.numeric) %>% fill(allegany:worcester, .direction = "down")
 
-df3 <- df3 %>% select(date:worcester) %>% mutate(date = as.Date(date))
 
-df3 <- df3 %>% tail(n = 21) %>% mutate_if(is.character, as.numeric)
-
-df3 <- df3 %>% fill(allegany:worcester, .direction = "down")
 
 df3 <- df3 %>% mutate(allegany = allegany - lag(allegany)) %>%
   mutate(anne_arundel = anne_arundel - lag(anne_arundel))  %>%
@@ -394,8 +371,8 @@ write_csv(big_table, "big-table.csv")
 
 
 
-df9 <- read.socrata("https://opendata.maryland.gov/resource/ix2d-fenx.json") %>% mutate(date = as.Date(date))
-df9 <- df9 %>% tail(n = 1) %>% select(date:age_unknown)
+df9 <- read.socrata("https://opendata.maryland.gov/resource/ix2d-fenx.json") %>% mutate(date = as.Date(date)) %>% tail(n = 1) %>% select(date:age_unknown)
+
 df9 <- df9 %>% rename("Age 0-9"="age_0_to_9") %>% 
   rename("Age 10-19"="age_10_to_19") %>%
   rename("Age 20-29"="age_20_to_29") %>% 
@@ -447,8 +424,8 @@ age_graphic  <- age_graphic %>% rename("Percentage of deaths"="pct_age_deaths") 
 write_csv(age_graphic, "age_graphic.csv")
 
 
-df10 <- read.socrata("https://opendata.maryland.gov/resource/qwhp-7983.json")
-df10 <- df10 %>% tail(n = 1) %>% select(date:not_available)
+df10 <- read.socrata("https://opendata.maryland.gov/resource/qwhp-7983.json") %>% tail(n = 1) %>% select(date:not_available)
+
 
 df10 <- df10 %>% rename("Black or African American"="african_american") %>%
   rename("White"="white") %>% 
@@ -492,11 +469,9 @@ race_ethn_graphic <- race_ethn_graphic %>% rename("Percentage of deaths"="pct_ra
 
 write_csv(race_ethn_graphic, "race_ethn_graphic.csv")
 
-### cdc hospitalizations by county
 
-cdc <- read.socrata("https://data.cdc.gov/resource/akn2-qxic.json")
 
-cdc <- cdc %>% filter(state == "Maryland") %>% mutate(week_end_date = as.Date(week_end_date)) %>% arrange(week_end_date) %>% tail(n=23)
+cdc <- read.socrata("https://data.cdc.gov/resource/akn2-qxic.json") %>% filter(state == "Maryland") %>% mutate(week_end_date = as.Date(week_end_date)) %>% arrange(week_end_date) %>% tail(n=23)
 
 md_cdc <- cdc %>% select(county, fips_code, total_adm_all_covid_confirmed_level, total_adm_all_covid_confirmed_per_100k)
 
