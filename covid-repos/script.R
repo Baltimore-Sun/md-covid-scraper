@@ -492,6 +492,16 @@ race_ethn_graphic <- race_ethn_graphic %>% rename("Percentage of deaths"="pct_ra
 
 write_csv(race_ethn_graphic, "race_ethn_graphic.csv")
 
+### cdc hospitalizations by county
+
+cdc <- read.socrata("https://data.cdc.gov/resource/akn2-qxic.json")
+
+cdc <- cdc %>% filter(state == "Maryland") %>% mutate(week_end_date = as.Date(week_end_date)) %>% arrange(week_end_date) %>% tail(n=23)
+
+md_cdc <- cdc %>% select(county, fips_code, total_adm_all_covid_confirmed_level, total_adm_all_covid_confirmed_per_100k)
+
+write_csv(md_cdc, "md_cdc.csv")
+
 
 
 
