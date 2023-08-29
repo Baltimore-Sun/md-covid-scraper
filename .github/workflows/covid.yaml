@@ -8,7 +8,7 @@ name: covid-scraper
 jobs:
   run-r-script:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
