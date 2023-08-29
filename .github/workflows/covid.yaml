@@ -29,7 +29,6 @@ jobs:
             any::knitr
             any::tidyverse
             any::zoo
-            devtools::install_github("Chicago/RSocrata")
 
       - name: Execute Script
         run: |
