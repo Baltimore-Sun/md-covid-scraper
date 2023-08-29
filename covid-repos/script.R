@@ -471,11 +471,23 @@ write_csv(race_ethn_graphic, "race_ethn_graphic.csv")
 
 
 
-cdc <- read.socrata("https://data.cdc.gov/resource/akn2-qxic.json") %>% filter(state == "Maryland") %>% mutate(week_end_date = as.Date(week_end_date)) %>% arrange(week_end_date) %>% tail(n=23)
+cdc <- read.socrata("https://data.cdc.gov/resource/akn2-qxic.json") %>% filter(state == "Maryland") %>% mutate(week_end_date = as.Date(week_end_date)) %>% arrange(week_end_date) %>% tail(n=24)
 
-md_cdc <- cdc %>% select(county, fips_code, total_adm_all_covid_confirmed_level, total_adm_all_covid_confirmed_per_100k)
+md_cdc <- cdc %>% select(county, fips_code, week_end_date, total_adm_all_covid_confirmed_level, total_adm_all_covid_confirmed_per_100k)
+
+
+total_adm_all_covid_confirmed_level <- c("Medium (10.9-19.9)","High (≥20.0)")
+
+
+
+additions <- data.frame(total_adm_all_covid_confirmed_level)
+
+md_cdc <- md_cdc %>% full_join(additions, by="total_adm_all_covid_confirmed_level")
+
+
 
 write_csv(md_cdc, "md_cdc.csv")
+
 
 
 
