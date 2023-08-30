@@ -16,6 +16,4 @@ The [covid.yaml](https://github.com/Baltimore-Sun/md-covid-scraper/blob/main/.gi
 
 If you use any of the CSVs created from this repository, please cite The Baltimore Sun as a contributing source.
 
-### Issues, questions, comments
 
-Do you have feedback or questions about this repository or the COVID-19 tracking page? [Fill out this form](https://latimes.wufoo.com/forms/survey-maryland-covid19-data/).
