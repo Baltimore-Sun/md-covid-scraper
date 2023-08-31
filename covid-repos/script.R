@@ -378,12 +378,12 @@ county_death_chg2 <- county_death_chg2 %>% pivot_wider(names_from = order, value
 big_table <- county_deaths2 %>% full_join(county_death_chg2, by="County")
 
 
-#### leaving off here
+
 
 big_table <- big_table %>% full_join(county_cases2, by="County")
 
 
-big_table <- big_table %>% select(-c(Date.y)) %>% select(-c(Date.x))
+big_table <- big_table %>% select(-c(Date.y)) %>% select(-c(Date.x)) %>% rename("Jurisdiction"="County")
 
 
 write_csv(big_table, "big-table.csv")
