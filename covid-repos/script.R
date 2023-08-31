@@ -48,6 +48,8 @@ write_csv(md_deaths, "md_deaths.csv")
 
 md_hosp2 <- df6_sum %>% tail(n = 1)
 
+md_hosp2 <- md_hosp2 %>% mutate(reportdate = format(as.Date(md_hosp2$reportdate, "%Y-%m-%d"), "%m-%d-%Y"))
+
 md_hosp2 <- md_hosp2 %>% mutate(txt = "Hospitalizations as of")
 
 md_hosp2$MY <- paste(md_hosp2$txt, md_hosp2$reportdate)
@@ -57,6 +59,9 @@ md_hosp2  <- md_hosp2 %>% select(MY, avg7)
 
 
 md_deaths2 <- md_deaths %>% tail(n = 1)
+
+md_deaths2 <- md_deaths2 %>% mutate(date = format(as.Date(md_deaths2$date, "%Y-%m-%d"), "%m-%d-%Y"))
+
 
 md_deaths2 <- md_deaths2 %>% mutate(txt = "Deaths reported as of")
 
