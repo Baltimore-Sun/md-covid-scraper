@@ -147,10 +147,7 @@ topper <- topper %>% rename(" "="MY") %>% rename("7-day average"="avg7") %>% ren
 write_csv(topper, "graphic-top.csv")
 
 
-
-df8 <- read.socrata("https://opendata.maryland.gov/resource/x28q-kc4a.json") %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% tail(n = 21) %>% mutate_if(is.character, as.numeric) %>% fill(allegany:worcester, .direction = "down")
-
-
+df8 <- read.socrata("https://opendata.maryland.gov/resource/x28q-kc4a.json") %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% tail(n = 21) %>% mutate_if(is.character, as.numeric) %>% fill(allegany:worcester, .direction = "down")
 
 df8 <- df8 %>% mutate(allegany = allegany - lag(allegany)) %>%
   mutate(anne_arundel = anne_arundel - lag(anne_arundel))  %>%
@@ -177,17 +174,15 @@ df8 <- df8 %>% mutate(allegany = allegany - lag(allegany)) %>%
   mutate(wicomico = wicomico - lag(wicomico))  %>%
   mutate(worcester = worcester - lag(worcester))
 
-county_deaths <- df8 %>% select(allegany:worcester)
+county_deaths1 <- df8 %>% select(allegany:worcester)
 
-county_deaths <- transform(county_deaths, avg7 = rollmeanr(county_deaths, k = 7, fill = NA))
-
-
+county_deaths1 <- transform(county_deaths1, avg7 = rollmeanr(county_deaths1, k = 7, fill = NA))
 
 
 
-map_deaths <- county_deaths %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(blank = "blank")
+county_deaths <- county_deaths1 %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(blank = "blank")
 
-map_deaths <- map_deaths %>% rename("Allegany"="avg7.allegany") %>% 
+county_deaths <- county_deaths %>% rename("Allegany"="avg7.allegany") %>% 
   rename("Anne Arundel"="avg7.anne_arundel") %>% 
   rename("Baltimore County"="avg7.baltimore") %>% 
   rename("Baltimore City"="avg7.baltimore_city") %>% 
@@ -213,34 +208,32 @@ map_deaths <- map_deaths %>% rename("Allegany"="avg7.allegany") %>%
   rename("Worcester"="avg7.worcester")
 
 county_table <- df8 %>% select(date) %>% tail(n=1) %>% mutate(blank = "blank")
-map_deaths <- map_deaths %>% full_join(county_table, by="blank")
+county_deaths <- county_deaths %>% full_join(county_table, by="blank")
 
-map_deaths <- map_deaths %>% select(-c(blank))
+county_deaths <- county_deaths %>% select(-c(blank))
 
-map_deaths <- map_deaths %>% pivot_longer(!date, names_to = "county", values_to = "seven_day_average")
+county_deaths <- county_deaths %>% pivot_longer(!date, names_to = "county", values_to = "value")
 
 county <- c("Allegany","Anne Arundel","Baltimore County","Baltimore City","Calvert" ,"Caroline","Carroll","Cecil","Charles","Dorchester","Frederick","Garrett" ,"Harford","Howard","Kent","Montgomery" ,"Prince George's","Queen Anne's","Somerset","St. Mary's","Talbot","Washington","Wicomico","Worcester")
 population <- c("67267","593286","846161","569931","94573","33433","175305","104942","170102","32726","287079","28579","263867","335411","19320","1052521","946971","51711","24546","114877","37932","155590","104664","53866")
 
 pop <- data.frame(county, population)
 
-map_deaths2 <- map_deaths %>% full_join(pop, by="county")
+county_deaths2 <- county_deaths %>% full_join(pop, by="county")
 
-map_deaths2 <- map_deaths2 %>% mutate(population = as.numeric(population))
+county_deaths2 <- county_deaths2 %>% mutate(population = as.numeric(population))
 
-map_deaths2 <- map_deaths2 %>% mutate(avg7_per10k = seven_day_average/population*10000)
+county_deaths2 <- county_deaths2 %>% mutate(avg7_per10k = value/population*10000)
 
-map_deaths2 <- map_deaths2 %>% select(date, county, avg7_per10k)
+county_deaths2 <- county_deaths2 %>% select(date, county, avg7_per10k)
 
-map_deaths2 <- map_deaths2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. deaths per 10,000"="avg7_per10k")
-
-write_csv(map_deaths2, "map_deaths.csv")
+county_deaths2 <- county_deaths2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. deaths per 10,000"="avg7_per10k")
 
 
+
+### starting county cases
 
 df3 <- read.socrata("https://opendata.maryland.gov/resource/tm86-dujs.json") %>% select(date:worcester) %>% mutate(date = as.Date(date)) %>% tail(n = 21) %>% mutate_if(is.character, as.numeric) %>% fill(allegany:worcester, .direction = "down")
-
-
 
 df3 <- df3 %>% mutate(allegany = allegany - lag(allegany)) %>%
   mutate(anne_arundel = anne_arundel - lag(anne_arundel))  %>%
@@ -271,9 +264,11 @@ county_cases <- df3 %>% select(allegany:worcester)
 
 county_cases <- transform(county_cases, avg7 = rollmeanr(county_cases, k = 7, fill = NA))
 
-map_cases <- county_cases %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(blank = "blank")
 
-map_cases <- map_cases %>% rename("Allegany"="avg7.allegany") %>% 
+
+county_cases <- county_cases %>% tail(n=1) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(blank = "blank")
+
+county_cases <- county_cases %>% rename("Allegany"="avg7.allegany") %>% 
   rename("Anne Arundel"="avg7.anne_arundel") %>% 
   rename("Baltimore County"="avg7.baltimore") %>% 
   rename("Baltimore City"="avg7.baltimore_city") %>% 
@@ -301,30 +296,54 @@ map_cases <- map_cases %>% rename("Allegany"="avg7.allegany") %>%
 
 county_table2 <- df3 %>% select(date) %>% tail(n=1) %>% mutate(blank = "blank")
 
-map_cases <- map_cases %>% full_join(county_table2, by="blank")
+county_cases <- county_cases %>% full_join(county_table2, by="blank")
 
-map_cases <- map_cases %>% select(-c(blank))
+county_cases <- county_cases %>% select(-c(blank))
 
-map_cases <- map_cases %>% pivot_longer(!date, names_to = "county", values_to = "seven_day_average")
+county_cases <- county_cases %>% pivot_longer(!date, names_to = "county", values_to = "seven_day_average")
 
+county_cases2 <- county_cases %>% full_join(pop, by="county")
 
+county_cases2 <- county_cases2 %>% mutate(population = as.numeric(population))
 
-map_cases2 <- map_cases %>% full_join(pop, by="county")
+county_cases2 <- county_cases2 %>% mutate(avg7_per10k = seven_day_average/population*10000)
 
-map_cases2 <- map_cases2 %>% mutate(population = as.numeric(population))
+county_cases2 <- county_cases2 %>% select(date, county, avg7_per10k)
 
-map_cases2 <- map_cases2 %>% mutate(avg7_per10k = seven_day_average/population*10000)
-
-map_cases2 <- map_cases2 %>% select(date, county, avg7_per10k)
-
-map_cases2 <- map_cases2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. cases per 10,000"="avg7_per10k")
-
-write_csv(map_cases2, "map_cases.csv")
+county_cases2 <- county_cases2 %>% rename("Date"="date") %>% rename("County"="county") %>% rename("7-day avg. cases per 10,000"="avg7_per10k")
 
 
 
 
-county_death_chg <- county_deaths %>% tail(n=14) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(order= c("a","b","c","d","e","f","g","h","i","j","k","l","m","n"))
+###take last two weeks and pivot wider for deaths
+
+county_death_chg <- county_deaths1 %>% tail(n=14) %>% select(`avg7.allegany`:`avg7.worcester`) %>% mutate(order= c("a","b","c","d","e","f","g","h","i","j","k","l","m","n"))
+
+
+county_death_chg <- county_death_chg %>% mutate(avg7.allegany = avg7.allegany/67267*10000) %>% 
+  mutate(avg7.anne_arundel = avg7.anne_arundel/593286*10000) %>% 
+  mutate(avg7.baltimore = avg7.baltimore/846161*10000) %>%
+  mutate(avg7.baltimore_city = avg7.baltimore_city/569931*10000) %>%
+  mutate(avg7.calvert = avg7.calvert/94573*10000) %>%
+  mutate(avg7.caroline = avg7.caroline/33433*10000) %>%
+  mutate(avg7.carroll = avg7.carroll/175305*10000) %>%
+  mutate(avg7.cecil = avg7.cecil/104942*10000) %>%
+  mutate(avg7.charles = avg7.charles/170102*10000) %>%
+  mutate(avg7.dorchester = avg7.dorchester/32726*10000) %>%
+  mutate(avg7.frederick = avg7.frederick/287079*10000) %>%
+  mutate(avg7.garrett = avg7.garrett/28579*10000) %>%
+  mutate(avg7.harford = avg7.harford/263867*10000) %>%
+  mutate(avg7.howard = avg7.howard/335411*10000) %>%
+  mutate(avg7.kent = avg7.kent/19320*10000) %>%
+  mutate(avg7.montgomery = avg7.montgomery/1052521*10000) %>%
+  mutate(avg7.prince_georges = avg7.prince_georges/946971*10000) %>%
+  mutate(avg7.queen_annes = avg7.queen_annes/51711*10000) %>%
+  mutate(avg7.somerset = avg7.somerset/24546*10000) %>%
+  mutate(avg7.st_marys = avg7.st_marys/114877*10000) %>%
+  mutate(avg7.talbot = avg7.talbot/37932*10000) %>%
+  mutate(avg7.washington = avg7.washington/155590*10000) %>%
+  mutate(avg7.wicomico = avg7.wicomico/104664*10000) %>%
+  mutate(avg7.worcester = avg7.worcester/53866*10000)
 
 county_death_chg <- county_death_chg %>% rename("Allegany"="avg7.allegany") %>% 
   rename("Anne Arundel"="avg7.anne_arundel") %>% 
@@ -351,24 +370,20 @@ county_death_chg <- county_death_chg %>% rename("Allegany"="avg7.allegany") %>%
   rename("Wicomico"="avg7.wicomico") %>% 
   rename("Worcester"="avg7.worcester")
 
-
-
-
 county_death_chg2 <- county_death_chg %>% pivot_longer(!order, names_to = "County", values_to = "Value")
+
 county_death_chg2 <- county_death_chg2 %>% pivot_wider(names_from = order, values_from =  Value)
 
 
-big_table <- map_deaths %>% full_join(county_death_chg2, by=c("county"="County"))
+big_table <- county_deaths2 %>% full_join(county_death_chg2, by="County")
 
 
-big_table <- big_table %>% full_join(map_cases, by="county")
+#### leaving off here
+
+big_table <- big_table %>% full_join(county_cases2, by="County")
 
 
-big_table <- big_table %>% select(-c(date.y)) %>% select(-c(date.x))
-
-big_table <- big_table %>% rename("County"="county") %>% rename("7-day average deaths"="seven_day_average.x") %>% rename("7-day average cases"="seven_day_average.y")
-
-
+big_table <- big_table %>% select(-c(Date.y)) %>% select(-c(Date.x))
 
 
 write_csv(big_table, "big-table.csv")
