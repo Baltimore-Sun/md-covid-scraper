@@ -29,6 +29,7 @@ jobs:
             any::knitr
             any::tidyverse
             any::zoo
+            any::RSocrata
 
       - name: Execute Script
         run: |
