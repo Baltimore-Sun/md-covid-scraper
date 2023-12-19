@@ -1,27 +1,27 @@
 county,fips_code,week_end_date,total_adm_all_covid_confirmed_level,total_adm_all_covid_confirmed_per_100k
-Harford County,24025,2023-12-02,Low (<10.0),6.1
-Cecil County,24015,2023-12-02,Low (<10.0),6.1
-Kent County,24029,2023-12-02,Low (<10.0),0.0
-Worcester County,24047,2023-12-02,Low (<10.0),9.1
-Wicomico County,24045,2023-12-02,Low (<10.0),9.1
-Somerset County,24039,2023-12-02,Low (<10.0),9.1
-Howard County,24027,2023-12-02,Low (<10.0),9.0
-Carroll County,24013,2023-12-02,Low (<10.0),9.0
-Calvert County,24009,2023-12-02,Low (<10.0),9.0
-Baltimore County,24005,2023-12-02,Low (<10.0),9.0
-Baltimore City,24510,2023-12-02,Low (<10.0),9.0
-Anne Arundel County,24003,2023-12-02,Low (<10.0),9.0
-Frederick County,24021,2023-12-02,Low (<10.0),6.5
-St. Marys County,24037,2023-12-02,Low (<10.0),3.9
-Prince Georges County,24033,2023-12-02,Low (<10.0),3.9
-Montgomery County,24031,2023-12-02,Low (<10.0),3.9
-Charles County,24017,2023-12-02,Low (<10.0),3.9
-Washington County,24043,2023-12-02,Low (<10.0),9.7
-Talbot County,24041,2023-12-02,Low (<10.0),2.0
-Queen Annes County,24035,2023-12-02,Low (<10.0),2.0
-Dorchester County,24019,2023-12-02,Low (<10.0),2.0
-Caroline County,24011,2023-12-02,Low (<10.0),2.0
-Garrett County,24023,2023-12-02,Medium (10.0 to 19.9),15.2
-Allegany County,24001,2023-12-02,Medium (10.0 to 19.9),15.2
+Harford County,24025,2023-12-09,Low (<10.0),5.9
+Cecil County,24015,2023-12-09,Low (<10.0),5.9
+Kent County,24029,2023-12-09,Low (<10.0),0.0
+Worcester County,24047,2023-12-09,Low (<10.0),8.9
+Wicomico County,24045,2023-12-09,Low (<10.0),8.9
+Somerset County,24039,2023-12-09,Low (<10.0),8.9
+Howard County,24027,2023-12-09,Low (<10.0),9.8
+Carroll County,24013,2023-12-09,Low (<10.0),9.8
+Calvert County,24009,2023-12-09,Low (<10.0),9.8
+Baltimore County,24005,2023-12-09,Low (<10.0),9.8
+Baltimore City,24510,2023-12-09,Low (<10.0),9.8
+Anne Arundel County,24003,2023-12-09,Low (<10.0),9.8
+Frederick County,24021,2023-12-09,Low (<10.0),6.0
+St. Marys County,24037,2023-12-09,Low (<10.0),4.0
+Prince Georges County,24033,2023-12-09,Low (<10.0),4.0
+Montgomery County,24031,2023-12-09,Low (<10.0),4.0
+Charles County,24017,2023-12-09,Low (<10.0),4.0
+Washington County,24043,2023-12-09,Low (<10.0),6.9
+Talbot County,24041,2023-12-09,Low (<10.0),2.0
+Queen Annes County,24035,2023-12-09,Low (<10.0),2.0
+Dorchester County,24019,2023-12-09,Low (<10.0),2.0
+Caroline County,24011,2023-12-09,Low (<10.0),2.0
+Garrett County,24023,2023-12-09,Medium (10.0 to 19.9),13.2
+Allegany County,24001,2023-12-09,Medium (10.0 to 19.9),13.2
 NA,NA,NA,Medium (10.9-19.9),NA
 NA,NA,NA,High (≥20.0),NA
