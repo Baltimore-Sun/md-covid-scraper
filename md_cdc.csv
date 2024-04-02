@@ -1,27 +1,27 @@
 county,fips_code,week_end_date,total_adm_all_covid_confirmed_level,total_adm_all_covid_confirmed_per_100k
-Harford County,24025,2024-03-16,Low (<10.0),2.4
-Cecil County,24015,2024-03-16,Low (<10.0),2.4
-Kent County,24029,2024-03-16,Low (<10.0),0.0
-Worcester County,24047,2024-03-16,Low (<10.0),3.0
-Wicomico County,24045,2024-03-16,Low (<10.0),3.0
-Somerset County,24039,2024-03-16,Low (<10.0),3.0
-Howard County,24027,2024-03-16,Low (<10.0),3.7
-Carroll County,24013,2024-03-16,Low (<10.0),3.7
-Calvert County,24009,2024-03-16,Low (<10.0),3.7
-Baltimore County,24005,2024-03-16,Low (<10.0),3.7
-Baltimore City,24510,2024-03-16,Low (<10.0),3.7
-Anne Arundel County,24003,2024-03-16,Low (<10.0),3.7
-Frederick County,24021,2024-03-16,Low (<10.0),2.0
-St. Marys County,24037,2024-03-16,Low (<10.0),2.5
-Prince Georges County,24033,2024-03-16,Low (<10.0),2.5
-Montgomery County,24031,2024-03-16,Low (<10.0),2.5
-Charles County,24017,2024-03-16,Low (<10.0),2.5
-Washington County,24043,2024-03-16,Low (<10.0),1.9
-Talbot County,24041,2024-03-16,Low (<10.0),0.7
-Queen Annes County,24035,2024-03-16,Low (<10.0),0.7
-Dorchester County,24019,2024-03-16,Low (<10.0),0.7
-Caroline County,24011,2024-03-16,Low (<10.0),0.7
-Garrett County,24023,2024-03-16,Low (<10.0),6.6
-Allegany County,24001,2024-03-16,Low (<10.0),6.6
+Harford County,24025,2024-03-23,Low (<10.0),2.3
+Cecil County,24015,2024-03-23,Low (<10.0),2.3
+Kent County,24029,2024-03-23,Low (<10.0),0.0
+Worcester County,24047,2024-03-23,Low (<10.0),3.5
+Wicomico County,24045,2024-03-23,Low (<10.0),3.5
+Somerset County,24039,2024-03-23,Low (<10.0),3.5
+Howard County,24027,2024-03-23,Low (<10.0),3.5
+Carroll County,24013,2024-03-23,Low (<10.0),3.5
+Calvert County,24009,2024-03-23,Low (<10.0),3.5
+Baltimore County,24005,2024-03-23,Low (<10.0),3.5
+Baltimore City,24510,2024-03-23,Low (<10.0),3.5
+Anne Arundel County,24003,2024-03-23,Low (<10.0),3.5
+Frederick County,24021,2024-03-23,Low (<10.0),2.2
+St. Marys County,24037,2024-03-23,Low (<10.0),2.1
+Prince Georges County,24033,2024-03-23,Low (<10.0),2.1
+Montgomery County,24031,2024-03-23,Low (<10.0),2.1
+Charles County,24017,2024-03-23,Low (<10.0),2.1
+Washington County,24043,2024-03-23,Low (<10.0),2.2
+Talbot County,24041,2024-03-23,Low (<10.0),0.0
+Queen Annes County,24035,2024-03-23,Low (<10.0),0.0
+Dorchester County,24019,2024-03-23,Low (<10.0),0.0
+Caroline County,24011,2024-03-23,Low (<10.0),0.0
+Garrett County,24023,2024-03-23,Low (<10.0),6.6
+Allegany County,24001,2024-03-23,Low (<10.0),6.6
 NA,NA,NA,Medium (10.9-19.9),NA
 NA,NA,NA,High (≥20.0),NA
