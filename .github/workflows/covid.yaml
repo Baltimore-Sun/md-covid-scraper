@@ -30,7 +30,7 @@ jobs:
             any::tidyverse
             any::zoo
             any::RSocrata
-            ?stats::filter
+            ?base::filter
 
       - name: Execute Script
         run: |
